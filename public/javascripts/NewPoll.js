@@ -35,6 +35,13 @@ class NewResponse extends React.Component{
     }
 }
 
+/*************************************************************************************************
+ *
+ * the initialState class is used whenever it is necessary to set the NewPoll class to its
+ * initial state
+ *
+ */
+
 class intialState{
     constructor(){
         this.question = "";  /* the text of the question control */
