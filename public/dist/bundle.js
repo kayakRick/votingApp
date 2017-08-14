@@ -44144,6 +44144,7 @@ class Chart extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 /***************************************************************************************************
  * PollRow respresents a single poll response and is called from ShowPoll.Render()
  */
+
 class PollRow extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     constructor(props) {
         super(props);
@@ -44186,6 +44187,7 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         this.onNewResponseClick = this.onNewResponseClick.bind(this);
         this.getPollURL = Object(__WEBPACK_IMPORTED_MODULE_2__getBaseUrl__["a" /* default */])() + "poll/";
         this.httpRequest = null;
+        console.log(this.props.params.pollId + ":" + localStorage.getItem(this.props.params.pollId));
         this.state = {
             poll: null,
             getStatus: "waiting",
@@ -44234,7 +44236,7 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                 if (this.httpRequest.status === 200) {
                     let poll = JSON.parse(this.httpRequest.responseText);
 
-                    if (this.state.getStatus == "waitingForUpdate") localStorage.setItem(poll._id, true);
+                    if (this.state.getStatus == "waitingForVote") localStorage.setItem(poll._id, true);
 
                     this.setState({
                         poll: poll,
@@ -44244,7 +44246,7 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     //console.log(JSON.parse(this.httpRequest.responseText));
                 } else {
 
-                    if (this.state.getStatus == "waitingForUpdate") this.setState({ voteAllowed: true });
+                    if (this.state.getStatus == "waitingForVote") this.setState({ voteAllowed: true });
 
                     this.setState({
                         getStatus: "failed",

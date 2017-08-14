@@ -143,6 +143,7 @@ export default class ShowPoll extends React.Component {
         this.onNewResponseClick = this.onNewResponseClick.bind(this);
         this.getPollURL = getBaseUrl() + "poll/";
         this.httpRequest = null;
+        console.log(this.props.params.pollId + ":" + localStorage.getItem(this.props.params.pollId))
         this.state = {
             poll: null,
             getStatus: "waiting",
@@ -194,7 +195,7 @@ export default class ShowPoll extends React.Component {
                 if (this.httpRequest.status === 200) {
                     let poll = JSON.parse(this.httpRequest.responseText);
 
-                    if(this.state.getStatus == "waitingForUpdate")
+                    if(this.state.getStatus == "waitingForVote")
                         localStorage.setItem(poll._id, true);
 
                     this.setState({
@@ -205,7 +206,7 @@ export default class ShowPoll extends React.Component {
                     //console.log(JSON.parse(this.httpRequest.responseText));
                 } else {
 
-                    if(this.state.getStatus == "waitingForUpdate")
+                    if(this.state.getStatus == "waitingForVote")
                         this.setState({voteAllowed: true});
 
                     this.setState({
