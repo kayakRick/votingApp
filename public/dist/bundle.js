@@ -12683,10 +12683,16 @@ var go = exports.go = function go(n) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getBaseUrl;
+/********************************************************************************************************
+ *
+ * This function returns the base url of the app, including transport and port
+ *
+ *********************************************************************************************************/
+
 function getBaseUrl() {
 
-    let port = window.location.port == "" ? "" : ":" + window.location.port;
-    return window.location.protocol + "//" + window.location.hostname + port + "/";
+  let port = window.location.port == "" ? "" : ":" + window.location.port;
+  return window.location.protocol + "//" + window.location.hostname + port + "/";
 }
 
 /***/ }),
@@ -43779,6 +43785,13 @@ class NewResponse extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Componen
     }
 }
 
+/*************************************************************************************************
+ *
+ * the initialState class is used whenever it is necessary to set the NewPoll class to its
+ * initial state
+ *
+ */
+
 class intialState {
     constructor() {
         this.question = ""; /* the text of the question control */
@@ -44016,9 +44029,21 @@ class NewPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_chartjs_2__ = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_chartjs_2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_chartjs_2__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getBaseUrl__ = __webpack_require__(71);
+/*******************************************************************************************************
+ * This file contains the ShowPoll class and it's supporting classes. This class is called from the App
+ * class via the react router by default on the index page. It is also displayed on the "your polls"
+ * page via the YourPolls.js script. If the user is loged in and the owner of the displayed poll, an "add
+ * response" button will be displayed
+ *
+ */
 
 
 
+
+
+/*******************************************************************************************************
+ * This class encapsolates the new response button. It is called from the ShowPoll Render function
+ */
 
 class NewRespButton extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     constructor(props) {
@@ -44051,6 +44076,10 @@ class NewRespButton extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Compon
     }
 }
 
+/***************************************************************************************************
+ * dataClass is used by the Chart class
+ */
+
 class dataClass {
     constructor() {
         this.data = {
@@ -44067,6 +44096,11 @@ class dataClass {
         return this.data;
     }
 }
+
+/*******************************************************************************************************
+ * The Chart class is draws the dobut chart and is called in ShowPolls Render function.
+ * It is a wrapper for react-chartjs-2
+ */
 
 class Chart extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     constructor(props) {
@@ -44085,7 +44119,7 @@ class Chart extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     }
 
     render() {
-        if (this.props.poll == null) return null;
+        if (this.props.poll == null) return null; // on first use, the poll hasn't been populated yet
 
         let data = new dataClass().getData();
         let responses = this.props.poll.response;
@@ -44107,6 +44141,9 @@ class Chart extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
 }
 
+/***************************************************************************************************
+ * PollRow respresents a single poll response and is called from ShowPoll.Render()
+ */
 class PollRow extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     constructor(props) {
         super(props);
@@ -44152,7 +44189,7 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         this.state = {
             poll: null,
             getStatus: "waiting",
-            voteAllowed: false
+            voteAllowed: localStorage.getItem(this.props.params.pollId) ? false : true
         };
         this.getPoll();
     }
@@ -44179,7 +44216,7 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                 self.httpRequest.open("POST", self.getPollURL + "newResp/" + poll._id + "/" + nextQuestionIdx + "/" + result);
                 self.httpRequest.setRequestHeader("Content-Type", "application/json");
                 self.httpRequest.send(JSON.stringify(poll));
-                self.setState({ getStatus: "waitingForUpdate" });
+                self.setState({ getStatus: "waitingForUpdateNewResponse" });
             }
         });
     }
@@ -44197,18 +44234,23 @@ class ShowPoll extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                 if (this.httpRequest.status === 200) {
                     let poll = JSON.parse(this.httpRequest.responseText);
 
+                    if (this.state.getStatus == "waitingForUpdate") localStorage.setItem(poll._id, true);
+
                     this.setState({
                         poll: poll,
-                        getStatus: "success",
-                        voteAllowed: localStorage.getItem(poll._id) ? false : true
+                        getStatus: "success"
                     });
 
                     //console.log(JSON.parse(this.httpRequest.responseText));
                 } else {
+
+                    if (this.state.getStatus == "waitingForUpdate") this.setState({ voteAllowed: true });
+
                     this.setState({
                         getStatus: "failed",
                         errorMess: "Request Failed -- Response Code = " + this.httpRequest.status
                     });
+                    ;
                 }
             }
         } catch (e) {
