@@ -29219,7 +29219,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     }
 
     onAboutClick() {
-        bootbox.alert("Hello world!");
+        bootbox.alert('Written by Rick Evans<br>Code is available ' + '' + '<a href="https://github.com/kayakRick/votingApp" target="_blank">Here</a>');
     }
 
     render() {
