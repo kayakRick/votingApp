@@ -141,9 +141,8 @@ export default class ShowPoll extends React.Component {
         this.alertContents = this.alertContents.bind(this);
         this.onVoteButtonClick = this.onVoteButtonClick.bind(this);
         this.onNewResponseClick = this.onNewResponseClick.bind(this);
-        this.getPollURL = getBaseUrl() + "poll/";
+        this.getLoginURL = getBaseUrl() + "poll/";
         this.httpRequest = null;
-        console.log(this.props.params.pollId + ":" + localStorage.getItem(this.props.params.pollId))
         this.state = {
             poll: null,
             getStatus: "waiting",
@@ -172,7 +171,7 @@ export default class ShowPoll extends React.Component {
                 self.httpRequest = new XMLHttpRequest();
                 self.httpRequest.onreadystatechange = self.alertContents;
                 self.httpRequest.open
-                    ("POST", self.getPollURL + "newResp/" + poll._id + "/" + nextQuestionIdx +
+                    ("POST", self.getLoginURL + "newResp/" + poll._id + "/" + nextQuestionIdx +
                     "/" + result);
                 self.httpRequest.setRequestHeader("Content-Type", "application/json");
                 self.httpRequest.send(JSON.stringify(poll));
@@ -185,7 +184,7 @@ export default class ShowPoll extends React.Component {
     getPoll() {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.onreadystatechange = this.alertContents;
-        this.httpRequest.open("GET", this.getPollURL + this.props.params.pollId);
+        this.httpRequest.open("GET", this.getLoginURL + this.props.params.pollId);
         this.httpRequest.send();
     }
 
@@ -228,7 +227,7 @@ export default class ShowPoll extends React.Component {
     onVoteButtonClick(e) {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.onreadystatechange = this.alertContents;
-        this.httpRequest.open("POST", this.getPollURL + this.props.params.pollId + "/" + e.target.value);
+        this.httpRequest.open("POST", this.getLoginURL + this.props.params.pollId + "/" + e.target.value);
         this.httpRequest.send();
 
         this.setState({

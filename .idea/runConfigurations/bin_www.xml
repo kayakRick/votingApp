@@ -4,6 +4,8 @@
       <env name="DEBUG" value="votingApp:*" />
       <env name="MONGO_URI" value="mongodb://rick:win32api@ds131492.mlab.com:31492/freecodecamp" />
       <env name="BASE_URL" value="http://localhost:3000/" />
+      <env name="CLIENT_ID" value="158933141349660" />
+      <env name="CLIENT_SECRET" value="8a49697c213fa50106133a802c8f6da5" />
     </envs>
     <browser start="true" url="http://localhost:3000/" />
     <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">

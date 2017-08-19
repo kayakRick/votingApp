@@ -22,17 +22,18 @@ export default class MenuBar extends React.Component{
 
         let menu =[];
         let loginMess;
+        console.log(this.props.loggedIn)
 
         if(!this.props.loggedIn){
             menu.push(<li key={1}><Link to="/">Home</Link></li>);
-            menu.push(<li key={2}><a href="#" onClick={this.props.onLoginClick}>Login</a></li>);
+            menu.push(<li key={2}><a href="./login">Login</a></li>);
             menu.push(<li key={3}><a href="#" onClick={this.props.onAboutClick}>About</a></li>);
             loginMess = "Not Logged In"
         }else{
             menu.push(<li key={1}><Link to="/">Home</Link></li>);
             menu.push(<li key={2}><Link to="/YourPolls">Your Polls</Link></li>);
             menu.push(<li key={3}><Link to="/NewPoll">New Poll</Link></li>);
-            menu.push(<li key={4}><a href="#" onClick={this.props.onLogoutClick}>Logout</a></li>);
+            menu.push(<li key={4}><a href="./logout">Logout</a></li>);
             menu.push(<li key={5}><a href="#" onClick={this.props.onAboutClick}>About</a></li>);
             loginMess = "Logged In As " + sessionStorage.getItem("loginName");
         }

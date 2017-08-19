@@ -23,45 +23,41 @@ import ShowPollList from "./ShowPollList";
 import ShowPoll from "./ShowPoll";
 import YourPolls from "./YourPolls";
 
+import getBaseUrl from "./getBaseUrl";
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.onAboutClick = this.onAboutClick.bind(this);
-        this.onLoginClick = this.onLoginClick.bind(this);
-        this.onLogoutClick = this.onLogoutClick.bind(this);
 
-        sessionStorage.setItem("loggedIn", false);
+        console.log(document.cookie)
 
         this.state = {
-            loggedIn: false,
-            page: "main"
+            loggedIn: this.getCookieValue("loggedIn") == "true",
+            loginName: this.getCookieValue("name")
+        };
+
+        sessionStorage.setItem("loggedIn", this.state.loggedIn);
+        sessionStorage.setItem("loginName", this.state.loginName);
+
+    }
+
+    getCookieValue (sKey) {
+        if (!sKey) {
+            return null;
         }
+        return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
     }
 
     onAboutClick(){
         bootbox.alert("Hello world!");
     }
 
-    onLoginClick(){
-        sessionStorage.setItem("loginName", "kayakRick");
-        sessionStorage.setItem("loggedIn", true);
-        this.setState({
-            loggedIn: true
-        });
-    }
-
-    onLogoutClick(){
-        sessionStorage.removeItem("loginName");
-        sessionStorage.setItem("loggedIn", false);
-        this.setState({
-            loggedIn: false
-        });
-    }
 
     render() {
+        console.log(this.state.loggedIn)
         return(<div>
-            <MenuBar loggedIn={this.state.loggedIn} onAboutClick={this.onAboutClick}
-                onLoginClick={this.onLoginClick}  onLogoutClick={this.onLogoutClick}/>
+            <MenuBar loggedIn={this.state.loggedIn} onAboutClick={this.onAboutClick}/>
             {this.props.children}
         </div>);
     }
